@@ -4,9 +4,11 @@
     <p align="center">
         Generate readable color palettes from any image!
     </p>
+    <p align="center">
     <img alt="Static Badge" src="https://img.shields.io/badge/pip_install-palettesnap-blue?style=flat-square">
     <img alt="PyPI - Python Version" src="https://img.shields.io/pypi/pyversions/palettesnap?style=flat-square&color=green">
     <img alt="PyPI - Version" src="https://img.shields.io/pypi/v/palettesnap?style=flat-square&label=PaletteSnap&link=https%3A%2F%2Fpypi.org%2Fproject%2Fpalettesnap%2F">
+    </p>
 </header>
 
 **At the time of writing, PaletteSnap is in early Alpha. Many things are expected to be changed, and it is likely that new features will be added. Feel free to make suggestions.**
