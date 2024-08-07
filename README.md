@@ -69,8 +69,7 @@ Here is a table that compares PaletteSnap with pywal:
 | **More Color Variety Option** |         :x:        | :white_check_mark: |
 |     **Refreshes Programs**    |         :x:        | :white_check_mark: |
 |  **Custom background color**  | :white_check_mark: |         :x:        |
-|    **Cached colorschemes**    | :white_check_mark: |         :x:        |
-|       **Builtin themes**      | :white_check_mark: |         :x:        |
+|    **Cached colorschemes**    | :white_check_mark: | :white_check_mark: |
 |    **Color palette modes**    |  :warning: |     :white_check_mark:     |
 
 Note that many convenient features of pywal will be added to PaletteSnap in the future.
@@ -92,6 +91,7 @@ This is the simplest way to generate a palette. If you run `palsnap gen --help`,
 - `mixAmount`: amount to mix accent colors with chosen color for each iteration
 - `mixThreshold`: distance threshold for colors until mixing stops
 - `weight`: uniqueness weight for lighting optimization
+- `cache`: caches the palette according to the given name
 
 `extra` introduces extra colors with color harmony to improve color variety in the palette. `mix` refines the color palette by mixing the chosen colors with the original colors (red, green, etc.) to try to make them as close as possible to a "standard" colorscheme.
 
@@ -154,6 +154,15 @@ Normalized rgb values are
 ```
 {{magenta.nr}} {{magenta.ng}} {{magenta.nb}}
 ```
+
+## Caching
+To save time, it is possible to cache palettes. You can either cache palettes as you generate them with the `--cache` option, or you can cache the palette right after generating it with:
+```
+palsnap cache <name>
+```
+The latter method is useful if you want to generate and preview the palette before caching it.
+
+You can load cached palettes with `palsnap load <name>`, and you can delete them with `palsnap clear <name>`. `palsnap clear all` removes all the cached palettes. Finally, you can see a list of all the cached palettes you created with `palsnap list`.
 
 ## Color Palette
 Based on Everforest's palette usage,

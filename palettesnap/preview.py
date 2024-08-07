@@ -12,9 +12,6 @@ import toml
 from . import setup
 from .console import console
 from .colorClass import hexToRgb
-#import setup
-#from console import console
-#from colorClass import hexToRgb
 
 ###
 # Terminal function
@@ -33,6 +30,8 @@ def getTerminal() -> str:
     # parse the result
     if "wezterm" in result or "WezTerm" in result:
         return "wezterm"
+    elif "kitty" in result or "Kitty" in result:
+        return "kitty"
     else:
         return "NA"
 
@@ -40,10 +39,12 @@ def getTerminal() -> str:
 # Image function
 ###
 
-def showImage(path : str, terminal) -> None:
+def showImage(path : str, terminal : str) -> None:
     '''prints the image in the terminal'''
     if terminal == "wezterm":
         subprocess.run(["wezterm", "imgcat", path, "--height", "45%"])
+    elif terminal == "kitty":
+        subprocess.run(["kitty", "+kitten", "icat", path])
     else:
         console.log("Terminal type not supported for displaying images.")
         console.log("Skipping set to display the image.")

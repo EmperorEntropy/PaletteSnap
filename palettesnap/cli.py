@@ -3,11 +3,13 @@
 ###
 
 # Internal Modules
+from . import setup
 from .PaletteSnap import extractPalette
 from .wallpaper import setWallpaper
 from .templating import exportAll
 from .console import console
 from .preview import previewPalette
+from .cache import loadCache, clearCache, listCache, cachePalette
 
 # External Modules
 import typer
@@ -30,18 +32,18 @@ app = typer.Typer()
 def gen(
     path: Annotated[
         str,
-        typer.Argument(help="Path to wallpaper image")
+        typer.Argument(help="Path to wallpaper image.")
     ],
     skip: Annotated[
         bool,
         typer.Option(
-            help="Skip creating templates and setting wallpaper", rich_help_panel="Customization"
+            help="Skip creating templates and setting wallpaper.", rich_help_panel="Customization"
         ),
     ] = False,
     mode : Annotated[
         str,
         typer.Option(
-            help="Theme mode. light, dark, or auto", rich_help_panel="Customization"
+            help="Theme mode. light, dark, or auto.", rich_help_panel="Customization"
         ),
     ] = "auto",
     variety: Annotated[
@@ -53,7 +55,7 @@ def gen(
     sample : Annotated[
         int,
         typer.Option(
-            help="Number of colors to sample from images to find accent colors",
+            help="Number of colors to sample from images to find accent colors.",
             rich_help_panel="Customization"
         ),
     ] = 10000,
@@ -61,23 +63,30 @@ def gen(
         float,
         typer.Option(
             "--mixAmount", "-ma",
-            help="Percentage amount accent color should be mixed with picked color. 0 to 1", rich_help_panel="Customization"
+            help="Percentage amount accent color should be mixed with picked color. 0 to 1.", rich_help_panel="Customization"
         ),
     ] = 0.1,
     mixThreshold : Annotated[
         float,
         typer.Option(
             "--mixThreshold", "-mt",
-            help="Distance threshold for mixing", rich_help_panel="Customization"
+            help="Distance threshold for mixing.", rich_help_panel="Customization"
         ),
     ] = 0.16,
     weight : Annotated[
         int,
         typer.Option(
-            help="Uniqueness weight for optimization. Larger means more unique",
+            help="Uniqueness weight for optimization. Larger means more unique.",
             rich_help_panel="Customization"
         ),
     ] = 100,
+    cache : Annotated[
+        str,
+        typer.Option(
+            help="Name of palette to be cached as.",
+            rich_help_panel="Customization"
+        ),
+    ] = None
 ):
     '''
     Generates colorscheme given path to image and optional arguments.
@@ -91,7 +100,10 @@ def gen(
     if skip:
         start = time.time()
         # Only create palette
-        extractPalette(path, mode, variety, sample, mixAmount, mixThreshold, weight, True)
+        palette = extractPalette(path, mode, variety, sample, mixAmount, mixThreshold, weight, True)
+        # cache
+        if cache is not None:
+            cachePalette(cache)
         end = time.time()
         console.log(f"Process [green]completed[/green] in {end-start} seconds.")
     else:
@@ -99,15 +111,64 @@ def gen(
         # extract palette
         palette = extractPalette(path, mode, variety, sample, mixAmount, mixThreshold, weight, True)
         # set wallpaper background
-        setWallpaper(path) # setting background
+        setWallpaper(path)
         # export templates
         exportAll(palette, variety)
+        # cache
+        if cache is not None:
+            cachePalette(cache)
         end = time.time()
         console.log(f"Process [green]completed[/green] in {end-start} seconds.")
-
 
 @app.command()
 def preview():
     '''Previews current colorscheme.'''
     console.log("Previewing only works if you used a template to change your terminal colors.")
     previewPalette()
+
+@app.command()
+def cache(
+    name: Annotated[
+        str,
+        typer.Argument(help="Name of cached palette.")
+    ],
+):
+    '''caches the current color palette'''
+    start = time.time()
+    cachePalette(name)
+    end = time.time()
+    console.log(f"Process [green]completed[/green] in {end-start} seconds.")
+
+@app.command()
+def load(
+    name: Annotated[
+        str,
+        typer.Argument(help="Name of cached palette.")
+    ],
+):
+    '''loads the cached palette'''
+    start = time.time()
+    loadCache(name)
+    end = time.time()
+    console.log(f"Process [green]completed[/green] in {end-start} seconds.")
+
+@app.command()
+def clear(
+    name: Annotated[
+        str,
+        typer.Argument(help="Name of cached palette. Use 'all' to clear all cached palettes.")
+    ],
+):
+    '''clears the cached palette'''
+    start = time.time()
+    clearCache(name)
+    end = time.time()
+    console.log(f"Process [green]completed[/green] in {end-start} seconds.")
+
+@app.command()
+def list():
+    '''Lists all cached palettes'''
+    start = time.time()
+    listCache()
+    end = time.time()
+    console.log(f"Process [green]completed[/green] in {end-start} seconds.")

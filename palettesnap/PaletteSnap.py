@@ -330,32 +330,8 @@ def extractPalette(imgPath : str, mode : str, varietyFlag : str, numSample : int
         palette : dict[str, Color] = paletteExpanded
 
     # mixing
-    # if distMix:
-    #     console.log("Distance dependent mixing [green]enabled[/green].")
-    #     console.log("Mixing ratio quantity will [red]not[/red] be used.")
-    # else:
-    #     console.log("Distance dependent mixing [red]disabled[/red].")
-    #     console.log(f"Mixing colors with [i]{mixAmount * 100}%[/i] of accent colors to increase color variety.")
-
-    # console.log(palette)
     if varietyFlag == "mix":
         palette = mixPalette(accentColors, palette, mixAmount, mixThreshold)
-        # # mix palette with extra to increase color variety even more
-        # for key in accentColors:
-        #     paletteColor = palette[key].rgb
-        #     accentColor = accentColors[key].rgb
-        #     # mix both colors
-        #     if distMix:
-        #         # distance dependent mixing
-        #         distance = Color.findDist(palette[key], accentColors[key])
-        #         console.log(f"{key}: {distance}")
-        #         mixExpr = distance * 9/8
-        #         mixedColor = mixbox.lerp(paletteColor, accentColor, mixExpr)
-        #     else:
-        #         mixedColor = mixbox.lerp(paletteColor, accentColor, mixAmount)
-        #     # set mixed colors in palette
-        #     mixedColor = rgbColor(mixedColor)
-        #     palette[key] = mixedColor
 
     # adjusting
     if adjust:
@@ -364,7 +340,7 @@ def extractPalette(imgPath : str, mode : str, varietyFlag : str, numSample : int
         palette = {**palette, **newPalette}
 
     # background gradient
-    console.log("Generating background accents.")
+    console.log("Generating background gradient.")
     bgGradient = findBgGradient(palette["bg0"], palette["fg"])
     palette |= bgGradient
 
