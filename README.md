@@ -61,6 +61,8 @@ Here is a table that compares PaletteSnap with pywal:
 |  **Custom background color**  | :white_check_mark: |         :x:        |
 |    **Cached colorschemes**    | :white_check_mark: |         :x:        |
 |       **Builtin themes**      | :white_check_mark: |         :x:        |
+|    **Color palette modes**    |  :warning: |     :white_check_mark:     |
+
 Note that many convenient features of pywal will be added to PaletteSnap in the future.
 
 # Usage
