@@ -4,6 +4,9 @@
     <p align="center">
         Generate readable color palettes from any image!
     </p>
+    <img alt="Static Badge" src="https://img.shields.io/badge/pip_install-palettesnap-blue?style=flat-square">
+    <img alt="PyPI - Python Version" src="https://img.shields.io/pypi/pyversions/palettesnap?style=flat-square&color=green">
+    <img alt="PyPI - Version" src="https://img.shields.io/pypi/v/palettesnap?style=flat-square&label=PaletteSnap&link=https%3A%2F%2Fpypi.org%2Fproject%2Fpalettesnap%2F">
 </header>
 
 **At the time of writing, PaletteSnap is in early Alpha. Many things are expected to be changed, and it is likely that new features will be added. Feel free to make suggestions.**
@@ -28,8 +31,12 @@
 
 # Installation
 PaletteSnap is a python program, so Python is needed. It can be installed via pip:
-`pip install palettesnap`
-Note that PaletteSnap depends on many dependencies, and it takes a long time to install and import them. It roughly takes at least 25 seconds for PaletteSnap to import all the packages for its first run.
+```
+pip install palettesnap
+```
+It is not recommended to install PaletteSnap via the Github repository due to changes that may or may not break. Wait for new releases, and download them via `pip`.
+
+Note that PaletteSnap depends on many dependencies, and it might take a while for it to execute during its first run.
 
 PaletteSnap's functionality is supported by all OS that has Python. However, the wallpaper switching functionality may not be supported for certain OS. Here is a list of all OS that PaletteSnap's wallpaper switching supports:
 - macOS (tested)
@@ -37,6 +44,7 @@ PaletteSnap's functionality is supported by all OS that has Python. However, the
 - KDE Plasma Linux (untested)
 - XFCE Linux (untested)
 - MATE Linux (untested)
+
 If you have one of the untested OS, and it works, please let me know. If you have an OS that is not on the list, feel free to suggest it!
 
 # Features
@@ -76,12 +84,12 @@ This is very similar to what pywal does. For non-macOS systems, it generates the
 To generate a palette, run the following command:
 `palsnap gen <img_path>`
 This is the simplest way to generate a palette. If you run `palsnap gen --help`, you'll notice there is a list of options:
-- mode: theme mode (light/dark/auto)
-- variety: color variety type (default/extra/mix)
-- sample: number of colors to sample from image when finding accent color step
-- mixAmount: amount to mix accent colors with chosen color for each iteration
-- mixThreshold: distance threshold for colors until mixing stops
-- weight: uniqueness weight for lighting optimization
+- `mode`: theme mode (light/dark/auto)
+- `variety`: color variety type (default/extra/mix)
+- `sample`: number of colors to sample from image when finding accent color step
+- `mixAmount`: amount to mix accent colors with chosen color for each iteration
+- `mixThreshold`: distance threshold for colors until mixing stops
+- `weight`: uniqueness weight for lighting optimization
 
 `extra` introduces extra colors with color harmony to improve color variety in the palette. `mix` refines the color palette by mixing the chosen colors with the original colors (red, green, etc.) to try to make them as close as possible to a "standard" colorscheme.
 
@@ -183,7 +191,7 @@ This section will be expanded on with more detailed information.
 - Let users have more influence on palette output.
 - Add wallpaper switching support for Linux distributions.
 - Expand image preview capability to support more terminals.
--- Let users define number of background colors to influence the brightness of light/dark modes.
+- Let users define number of background colors to influence the brightness of light/dark modes.
 - Add custom background color support.
 - Add caching to save time if user used same options in the past.
 - Add folder support, allowing PaletteSnap to pick a wallpaper image randomly.
