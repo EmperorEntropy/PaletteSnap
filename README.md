@@ -8,6 +8,7 @@
     <img alt="Static Badge" src="https://img.shields.io/badge/pip_install-palettesnap-blue?style=flat-square">
     <img alt="PyPI - Python Version" src="https://img.shields.io/pypi/pyversions/palettesnap?style=flat-square&color=green">
     <img alt="PyPI - Version" src="https://img.shields.io/pypi/v/palettesnap?style=flat-square&label=PaletteSnap&link=https%3A%2F%2Fpypi.org%2Fproject%2Fpalettesnap%2F">
+    <img alt="PyPI - Downloads" src="https://img.shields.io/pypi/dd/palettesnap?style=flat-square&color=red">
     </p>
 </header>
 
@@ -202,9 +203,9 @@ This section will be expanded on with more detailed information.
 - Let users have more influence on palette output.
 - Add wallpaper switching support for Linux distributions.
 - Expand image preview capability to support more terminals.
+- Redo cache CLI. Do cache set, cache load, cache clear, cache list instead.
 - Let users define number of background colors to influence the brightness of light/dark modes.
 - Add custom background color support.
-- Add caching to save time if user used same options in the past.
 - Add folder support, allowing PaletteSnap to pick a wallpaper image randomly.
 
 # Acknowledgments
