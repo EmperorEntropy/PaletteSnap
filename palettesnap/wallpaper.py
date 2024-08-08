@@ -27,7 +27,6 @@ def findEnv():
     else:
         return None
 
-
 def setMacWallpaper(imgPath):
     '''set the wallpaper for macOS'''
     subprocess.run(['osascript', '-e', 'tell application \"System Events\" to tell every desktop to set picture to \"%s\" as POSIX file' % imgPath])

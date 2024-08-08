@@ -16,6 +16,11 @@ from .colorClass import hexToRgb
 ###
 # Terminal function
 ###
+def iTermCheck() -> bool:
+    '''checks if terminal is iTerm2 terminal'''
+    result = os.getenv("ITERM_SESSION_ID")
+    return result != None
+
 def getTerminal() -> str:
     '''identify the terminal type'''
     # python script's ppid is terminal shell's pid
@@ -32,6 +37,8 @@ def getTerminal() -> str:
         return "wezterm"
     elif "kitty" in result or "Kitty" in result:
         return "kitty"
+    elif iTermCheck():
+        return "iterm"
     else:
         return "NA"
 
@@ -45,6 +52,8 @@ def showImage(path : str, terminal : str) -> None:
         subprocess.run(["wezterm", "imgcat", path, "--height", "45%"])
     elif terminal == "kitty":
         subprocess.run(["kitty", "+kitten", "icat", path])
+    elif terminal == "iterm":
+        subprocess.run(["imgcat", path])
     else:
         console.log("Terminal type not supported for displaying images.")
         console.log("Skipping set to display the image.")

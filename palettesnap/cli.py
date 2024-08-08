@@ -9,7 +9,8 @@ from .wallpaper import setWallpaper
 from .templating import exportAll
 from .console import console
 from .preview import previewPalette
-from .cache import loadCache, clearCache, listCache, cachePalette
+from .cache import cacheSet, loadCache, loadRandomCache, removeCache, clearCache, listCache, renameCache
+from .outdatedCheck import outdatedCheck
 
 # External Modules
 import typer
@@ -19,15 +20,11 @@ import time
 ###
 # Functions
 ###
+app = typer.Typer(context_settings={"help_option_names": ["-h", "--help"]})
+cache_app = typer.Typer(context_settings={"help_option_names": ["-h", "--help"]}, help="Manipulates the cache.")
+app.add_typer(cache_app, name="cache")
 
-'''
-PaletteSnap has multiple commands:
-- gen: generates colorscheme from image
-- preview: preview colors of current colorscheme
-'''
-
-app = typer.Typer()
-
+# gen command
 @app.command()
 def gen(
     path: Annotated[
@@ -95,8 +92,9 @@ def gen(
     ] = None
 ):
     '''
-    Generates colorscheme given path to image and optional arguments.
+    Generates color palette given path to image and optional arguments.
     '''
+    outdatedCheck()
     # precheck
     if mode not in ["auto", "light", "dark"]:
         raise typer.BadParameter(f"{mode} is not a valid mode. Allowed values are auto, light, and dark.")
@@ -113,7 +111,7 @@ def gen(
         palette = extractPalette(path, mode, dominant, variety, sample, mixAmount, mixThreshold, weight, True)
         # cache
         if cache is not None:
-            cachePalette(cache)
+            cacheSet(cache)
         end = time.time()
         console.log(f"Process [green]completed[/green] in {end-start} seconds.")
     else:
@@ -126,10 +124,11 @@ def gen(
         exportAll(palette, variety)
         # cache
         if cache is not None:
-            cachePalette(cache)
+            cacheSet(cache)
         end = time.time()
         console.log(f"Process [green]completed[/green] in {end-start} seconds.")
 
+# preview command
 @app.command()
 def preview(
     image : Annotated[
@@ -140,52 +139,110 @@ def preview(
         ),
     ] = True,
 ):
-    '''Previews current colorscheme.'''
+    '''Previews current color palette.'''
+    outdatedCheck()
     previewPalette(image)
 
-@app.command()
-def cache(
+###
+# cache command
+###
+
+@cache_app.command("set")
+def cache_set(
     name: Annotated[
         str,
-        typer.Argument(help="Name of cached palette.")
+        typer.Argument(help="Name of cached palette to set to.")
     ],
 ):
-    '''caches the current color palette'''
+    '''Caches the current color palette with the given name.'''
     start = time.time()
-    cachePalette(name)
+    outdatedCheck()
+    cacheSet(name)
     end = time.time()
     console.log(f"Process [green]completed[/green] in {end-start} seconds.")
 
-@app.command()
-def load(
+@cache_app.command("load")
+def cache_load(
     name: Annotated[
         str,
         typer.Argument(help="Name of cached palette.")
     ],
 ):
-    '''loads the cached palette'''
+    '''Loads the cached palette given a name.'''
     start = time.time()
+    outdatedCheck()
     loadCache(name)
     end = time.time()
     console.log(f"Process [green]completed[/green] in {end-start} seconds.")
 
-@app.command()
-def clear(
-    name: Annotated[
-        str,
-        typer.Argument(help="Name of cached palette. Use 'all' to clear all cached palettes.")
-    ],
-):
-    '''clears the cached palette'''
+@cache_app.command("random")
+def cache_random():
+    '''Loads a random cached palette.'''
     start = time.time()
-    clearCache(name)
+    outdatedCheck()
+    loadRandomCache()
     end = time.time()
     console.log(f"Process [green]completed[/green] in {end-start} seconds.")
 
-@app.command()
-def list():
-    '''Lists all cached palettes'''
+@cache_app.command("remove")
+def cache_remove(
+    names: Annotated[
+        list[str],
+        typer.Argument(help="Names of cached palette.")
+    ],
+):
+    '''Removes cached palettes.'''
     start = time.time()
+    outdatedCheck()
+    removeCache(names)
+    end = time.time()
+    console.log(f"Process [green]completed[/green] in {end-start} seconds.")
+
+@cache_app.command("clear")
+def cache_clear(
+    skip: Annotated[
+        bool,
+        typer.Option(help="Skips the confirmation prompt.")
+    ] = False,
+):
+    '''Clears all cached palettes.'''
+    start = time.time()
+    outdatedCheck()
+    if not skip:
+        prompt = typer.confirm("Are you sure you want to clear the entire cache?")
+        if prompt:
+            clearCache()
+        else:
+            console.log()
+            raise typer.Exit()
+    else:
+        clearCache()
+    end = time.time()
+    console.log(f"Process [green]completed[/green] in {end-start} seconds.")
+
+@cache_app.command("list")
+def cache_list():
+    '''Lists all cached palettes.'''
+    start = time.time()
+    outdatedCheck()
     listCache()
+    end = time.time()
+    console.log(f"Process [green]completed[/green] in {end-start} seconds.")
+
+@cache_app.command("rename")
+def cache_rename(
+    oldName: Annotated[
+        str,
+        typer.Argument(help="Present name of cached palette.")
+    ],
+    newName : Annotated[
+        str,
+        typer.Argument(help="New name for cached palette.")
+    ],
+):
+    '''Renames cached palette.'''
+    start = time.time()
+    outdatedCheck()
+    renameCache(oldName, newName)
     end = time.time()
     console.log(f"Process [green]completed[/green] in {end-start} seconds.")

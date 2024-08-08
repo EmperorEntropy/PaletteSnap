@@ -204,12 +204,9 @@ PaletteSnap's flexibilty makes it possible for it to support any application wit
 This section will be expanded on with more detailed information.
 
 # To Do
-- Let users have more influence on palette output.
-- Add wallpaper switching support for Linux distributions.
-- Expand image preview capability to support more terminals.
-- Myabe redo cache CLI? Do cache set, cache load, cache clear, cache list instead.
-- Let users define number of background colors to influence the brightness of light/dark modes.
-- Add custom background color support.
+- Add wallpaper setting support for more Linux distributions.
+- Add image preview support for more terminals.
+- Add extra variety/option to tweak finally palettes with Oklch color space to prevent similar colors.
 
 # Acknowledgments
 - [pywal](https://github.com/dylanaraps/pywal) for the inspriation that led me to create PaletteSnap
