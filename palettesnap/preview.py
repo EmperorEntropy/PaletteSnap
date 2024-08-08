@@ -96,14 +96,15 @@ def printColors(colorDict : dict[str, str]) -> None:
 ###
 # Main function
 ###
-def previewPalette() -> None:
+def previewPalette(imageFlag) -> None:
     # Get image path and colors
     console.log("Terminal must support [blue]24-bit / true color[/blue] for previewing to work.")
-    palette = readPalette()
-    imgPath = palette["image"]
-    palette.pop("image")
-    # Get terminal type and print image
-    terminal = getTerminal()
-    showImage(imgPath, terminal)
+    if imageFlag:
+        palette = readPalette()
+        imgPath = palette["image"]
+        palette.pop("image")
+        # Get terminal type and print image
+        terminal = getTerminal()
+        showImage(imgPath, terminal)
     # Print colors
     printColors(palette)

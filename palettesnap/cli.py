@@ -46,10 +46,16 @@ def gen(
             help="Theme mode. light, dark, or auto.", rich_help_panel="Customization"
         ),
     ] = "auto",
+    dominant : Annotated[
+        int,
+        typer.Option(
+            help="Number of dominant colors to pick from image for background. Must be >= 2.", rich_help_panel="Customization"
+        ),
+    ] = 5,
     variety: Annotated[
         str,
         typer.Option(
-            help="default, extra, or mix", rich_help_panel="Customization"
+            help="default, extra, or mix.", rich_help_panel="Customization"
         ),
     ] = "default",
     sample : Annotated[
@@ -96,11 +102,15 @@ def gen(
         raise typer.BadParameter(f"{mode} is not a valid mode. Allowed values are auto, light, and dark.")
     if variety not in ["default", "extra", "mix"]:
         raise typer.BadParameter(f"{variety} is not a valid color variety type. Allowed values are default, extra, and mix.")
+    if dominant <= 1:
+        console.log("Illegal number of dominant colors.")
+    if mode == "auto" and dominant != 5:
+        console.log("Mode must not be auto for dominant option to be used.")
     # functionality
     if skip:
         start = time.time()
         # Only create palette
-        palette = extractPalette(path, mode, variety, sample, mixAmount, mixThreshold, weight, True)
+        palette = extractPalette(path, mode, dominant, variety, sample, mixAmount, mixThreshold, weight, True)
         # cache
         if cache is not None:
             cachePalette(cache)
@@ -109,7 +119,7 @@ def gen(
     else:
         start = time.time()
         # extract palette
-        palette = extractPalette(path, mode, variety, sample, mixAmount, mixThreshold, weight, True)
+        palette = extractPalette(path, mode, dominant, variety, sample, mixAmount, mixThreshold, weight, True)
         # set wallpaper background
         setWallpaper(path)
         # export templates
@@ -121,10 +131,17 @@ def gen(
         console.log(f"Process [green]completed[/green] in {end-start} seconds.")
 
 @app.command()
-def preview():
+def preview(
+    image : Annotated[
+        bool,
+        typer.Option(
+            help="Flag for image in preview output.",
+            rich_help_panel="Customization"
+        ),
+    ] = True,
+):
     '''Previews current colorscheme.'''
-    console.log("Previewing only works if you used a template to change your terminal colors.")
-    previewPalette()
+    previewPalette(image)
 
 @app.command()
 def cache(

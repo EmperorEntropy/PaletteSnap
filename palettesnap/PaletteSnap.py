@@ -49,7 +49,7 @@ def parseConfig() -> dict[str, Color]:
 ###
 # Finder Functions
 ##
-def findBackground(labColors : npt.NDArray[any], mode : str) -> Color:
+def findBackground(labColors : npt.NDArray[any], mode : str, dominant : int) -> Color:
     '''returns the background color for the palette'''
     if mode == "auto":
         # Apply KMeans clustering
@@ -60,7 +60,8 @@ def findBackground(labColors : npt.NDArray[any], mode : str) -> Color:
         return Color(*bgColors)
     else:
         # Apply KMeans clustering
-        kmeans = KMeans(n_clusters=5)
+        console.log(f"Using {dominant} dominant colors to find {mode} background color.")
+        kmeans = KMeans(n_clusters=dominant)
         kmeans.fit(labColors)
         bgColors = kmeans.cluster_centers_
         bgColors = [tuple(labColor) for labColor in bgColors]
@@ -223,13 +224,13 @@ def findClosestColor(colorDict : dict[str, Color], labColor : Color) -> str:
 ###
 # Palette Functions
 ###
-def pickColors(imgPath : str, accentColors : dict[str, Color], mode : str, numSample : int) -> dict[str, Color]:
+def pickColors(imgPath : str, accentColors : dict[str, Color], mode : str, dominant : int, numSample : int) -> dict[str, Color]:
     '''start picking colors from the image'''
     palette = dict()
     labColors = processImage(imgPath)
     # Background
     console.log("Finding background color.")
-    bg = findBackground(labColors, mode)
+    bg = findBackground(labColors, mode, dominant)
     palette["bg0"] = bg
     # Foreground
     console.log("Finding foreground color.")
@@ -290,7 +291,7 @@ def mixPalette(accentColors : dict[str, Color], palette : dict[str, Color], mixA
 ###
 # Main Function
 ###
-def extractPalette(imgPath : str, mode : str, varietyFlag : str, numSample : int, mixAmount : float, 
+def extractPalette(imgPath : str, mode : str, dominant : int, varietyFlag : str, numSample : int, mixAmount : float, 
                    mixThreshold : float, weight : int, adjust : bool) -> dict[str, Color]:
     '''extracts the palette from the image'''
     # Get the accent values
@@ -298,7 +299,7 @@ def extractPalette(imgPath : str, mode : str, varietyFlag : str, numSample : int
     accentColors = parseConfig()
 
     console.log("Extracting palette.")
-    palette = pickColors(imgPath, accentColors, mode, numSample)
+    palette = pickColors(imgPath, accentColors, mode, dominant, numSample)
 
     # harmony colors
     if varietyFlag != "default":

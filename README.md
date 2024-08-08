@@ -72,6 +72,7 @@ Here is a table that compares PaletteSnap with pywal:
 |  **Custom background color**  | :white_check_mark: |         :x:        |
 |    **Cached colorschemes**    | :white_check_mark: | :white_check_mark: |
 |    **Color palette modes**    |  :warning: |     :white_check_mark:     |
+|     **Random palette**        | :white_check_mark: | :white_check_mark: |
 
 Note that many convenient features of pywal will be added to PaletteSnap in the future.
 
@@ -87,6 +88,7 @@ To generate a palette, run the following command:
 `palsnap gen <img_path>`
 This is the simplest way to generate a palette. If you run `palsnap gen --help`, you'll notice there is a list of options:
 - `mode`: theme mode (light/dark/auto)
+- `dominant` : number of dominant colors to use when finding bg color (must have light/dark mode)
 - `variety`: color variety type (default/extra/mix)
 - `sample`: number of colors to sample from image when finding accent color step
 - `mixAmount`: amount to mix accent colors with chosen color for each iteration
@@ -163,7 +165,9 @@ palsnap cache <name>
 ```
 The latter method is useful if you want to generate and preview the palette before caching it.
 
-You can load cached palettes with `palsnap load <name>`, and you can delete them with `palsnap clear <name>`. `palsnap clear all` removes all the cached palettes. Finally, you can see a list of all the cached palettes you created with `palsnap list`.
+You can load cached palettes with `palsnap load <name>`, and you can delete them with `palsnap clear <name>`. If you want a random cached palette, you can get it with `palsnap load random`.
+
+`palsnap clear all` removes all the cached palettes. Finally, you can see a list of all the cached palettes you created with `palsnap list`.
 
 ## Color Palette
 Based on Everforest's palette usage,
@@ -203,10 +207,9 @@ This section will be expanded on with more detailed information.
 - Let users have more influence on palette output.
 - Add wallpaper switching support for Linux distributions.
 - Expand image preview capability to support more terminals.
-- Redo cache CLI. Do cache set, cache load, cache clear, cache list instead.
+- Myabe redo cache CLI? Do cache set, cache load, cache clear, cache list instead.
 - Let users define number of background colors to influence the brightness of light/dark modes.
 - Add custom background color support.
-- Add folder support, allowing PaletteSnap to pick a wallpaper image randomly.
 
 # Acknowledgments
 - [pywal](https://github.com/dylanaraps/pywal) for the inspriation that led me to create PaletteSnap
