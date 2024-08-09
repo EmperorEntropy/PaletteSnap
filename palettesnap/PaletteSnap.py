@@ -139,50 +139,49 @@ def findAccentColors(labColors : npt.NDArray[any], extraDict : dict[str, Color],
 
 def findColorHarmony(givenColor : Color) -> dict[str, Color]:
     '''finds colors that are harmonious with the given color'''
-    # use HSL color space
-    hue, saturation, light = givenColor.hsl
+    # use Oklch color space
+    light, chroma, hue = givenColor.oklch
     harmonyColors = dict()
     # complementary
     comHue = (hue + 180) % 360
-    complementaryColor = (comHue, saturation, light)
-    harmonyColors["complementary"] = hslColor(complementaryColor)
+    complementaryColor = (light, chroma, comHue)
+    harmonyColors["complementary"] = lchColor(complementaryColor)
     # analogous
     angHue1 = (hue + 30) % 360
     angHue2 = (hue - 30) % 360
-    ang1 = (angHue1, saturation, light)
-    ang2 = (angHue2, saturation, light)
-    harmonyColors["analogous 1"] = hslColor(ang1)
-    harmonyColors["analogous 2"] = hslColor(ang2)
+    ang1 = (light, chroma, angHue1)
+    ang2 = (light, chroma, angHue2)
+    harmonyColors["analogous 1"] = lchColor(ang1)
+    harmonyColors["analogous 2"] = lchColor(ang2)
     # split complementary
     splitHue1 = (hue + 150) % 360
     splitHue2 = (hue + 210) % 360
-    split1 = (splitHue1, saturation, light)
-    split2 = (splitHue2, saturation, light)
-    harmonyColors["split complementary 1"] = hslColor(split1)
-    harmonyColors["split complementary 2"] = hslColor(split2)
+    split1 = (light, chroma, splitHue1)
+    split2 = (light, chroma, splitHue2)
+    harmonyColors["split complementary 1"] = lchColor(split1)
+    harmonyColors["split complementary 2"] = lchColor(split2)
     # triadic
     triHue1 = (hue + 120) % 360
     triHue2 = (hue + 240) % 360
-    tri1 = (triHue1, saturation, light)
-    tri2 = (triHue2, saturation, light)
-    harmonyColors["triadic 1"] = hslColor(tri1)
-    harmonyColors["triadic 2"] = hslColor(tri2)
+    tri1 = (light, chroma, triHue1)
+    tri2 = (light, chroma, triHue2)
+    harmonyColors["triadic 1"] = lchColor(tri1)
+    harmonyColors["triadic 2"] = lchColor(tri2)
     # square (og, 90, 180, 270)
     squareHue1 = (hue + 90) % 360
     squareHue2 = (hue + 270) % 360
-    sq1 = (squareHue1, saturation, light)
-    sq2 = (squareHue2, saturation, light)
-    harmonyColors["square 1"] = hslColor(sq1)
-    harmonyColors["square 2"] = hslColor(sq2)
+    sq1 = (light, chroma, squareHue1)
+    sq2 = (light, chroma, squareHue2)
+    harmonyColors["square 1"] = lchColor(sq1)
+    harmonyColors["square 2"] = lchColor(sq2)
     # tetradic (og, 60, 180, 240)
     tetraHue1 = (hue + 60) % 360
     tetraHue2 = (hue + 240) % 360
-    tetra1 = (tetraHue1, saturation, light)
-    tetra2 = (tetraHue2, saturation, light)
-    harmonyColors["tetradic 1"] = hslColor(tetra1)
-    harmonyColors["tetradic 2"] = hslColor(tetra2)
+    tetra1 = (light, chroma, tetraHue1)
+    tetra2 = (light, chroma, tetraHue2)
+    harmonyColors["tetradic 1"] = lchColor(tetra1)
+    harmonyColors["tetradic 2"] = lchColor(tetra2)
     return harmonyColors
-
 
 ###
 # Manipulation Functions
