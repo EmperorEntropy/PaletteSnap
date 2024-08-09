@@ -6,7 +6,7 @@
 from . import setup
 from .colorOptimize import performOptimal
 from .console import console
-from .colorClass import Color, hslColor, rgbColor, hexColor, cieColor
+from .colorClass import Color, hslColor, rgbColor, hexColor, lchColor
 
 # External Modules
 import numpy as np
@@ -221,6 +221,24 @@ def findClosestColor(colorDict : dict[str, Color], labColor : Color) -> str:
             bestColor = key
     return bestColor
 
+def tweakColor(paletteColor : Color, orgColor : Color, hueThreshold, hueFactor, chromaThreshold, chromaFactor) -> Color:
+    '''tweaks the chroma and hue of the color so that it is closer to the accent colors'''
+    orgHue = orgColor.oklch[2]
+    paletteHue = paletteColor.oklch[2]
+    orgChroma = orgColor.oklch[1]
+    paletteChroma = paletteColor.oklch[1]
+    # change hue
+    if abs(orgHue - paletteHue) > hueThreshold:
+        newHue = orgHue * hueFactor
+    else:
+        newHue = paletteHue
+    # change chroma
+    if paletteChroma * chromaThreshold <= orgChroma:
+        newChroma = orgChroma * chromaFactor
+    else:
+        newChroma = paletteChroma
+    return lchColor((paletteColor.oklch[0], newChroma, newHue))
+
 ###
 # Palette Functions
 ###
@@ -291,8 +309,9 @@ def mixPalette(accentColors : dict[str, Color], palette : dict[str, Color], mixA
 ###
 # Main Function
 ###
-def extractPalette(imgPath : str, mode : str, dominant : int, varietyFlag : str, numSample : int, mixAmount : float, 
-                   mixThreshold : float, weight : int, adjust : bool) -> dict[str, Color]:
+def extractPalette(imgPath : str, mode : str, dominant : int, extraFlag : bool, mixFlag : bool, tweakFlag : bool,  
+                   numSample : int, mixAmount : float, mixThreshold : float, weight : int, 
+                   hueThreshold, hueFactor, chromaThreshold, chromaFactor, adjust : bool) -> dict[str, Color]:
     '''extracts the palette from the image'''
     # Get the accent values
     console.log("Reading [u]palsnap.toml[/u].")
@@ -302,8 +321,8 @@ def extractPalette(imgPath : str, mode : str, dominant : int, varietyFlag : str,
     palette = pickColors(imgPath, accentColors, mode, dominant, numSample)
 
     # harmony colors
-    if varietyFlag != "default":
-        console.log("Finding even more colors to improve color variety.")
+    if extraFlag:
+        console.log("Finding extra colors to improve color variety.")
         bgColor = palette["bg0"]
         fgColor = palette["fg"]
         palette = {key: [value] for key, value in palette.items()}
@@ -331,8 +350,15 @@ def extractPalette(imgPath : str, mode : str, dominant : int, varietyFlag : str,
         palette : dict[str, Color] = paletteExpanded
 
     # mixing
-    if varietyFlag == "mix":
+    if mixFlag:
         palette = mixPalette(accentColors, palette, mixAmount, mixThreshold)
+
+    # tweak colors
+    if tweakFlag:
+        console.log("Tweaking colors.")
+        for key in accentColors:
+            newColor = tweakColor(palette[key], accentColors[key], hueThreshold, hueFactor, chromaThreshold, chromaFactor)
+            palette[key] = newColor
 
     # adjusting
     if adjust:

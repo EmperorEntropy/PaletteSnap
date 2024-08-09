@@ -3,6 +3,7 @@
 ###
 import numpy as np
 from colour import Oklab_to_XYZ, XYZ_to_sRGB, RGB_to_HSL, sRGB_to_XYZ, XYZ_to_Lab, XYZ_to_Oklab, Lab_to_XYZ, HSL_to_RGB
+from colour.models import JCh_to_Jab, Jab_to_JCh
 from PIL import ImageColor
 
 ###
@@ -103,6 +104,12 @@ def hexToRgb(hexColor):
     red, green, blue = ImageColor.getcolor(hexColor, "RGB")
     return (red, green, blue)
 
+# used for palette extraction
+def lchColor(lchColor):
+    '''Oklch to Color'''
+    labColor = tuple(JCh_to_Jab(list(lchColor)))
+    return Color(*labColor)
+
 ###
 # Color class
 ###
@@ -115,6 +122,7 @@ class Color():
         self.b = b
         # different color spaces
         self.oklab = (L, a, b)
+        self.oklch = tuple(Jab_to_JCh(list(self.oklab)))
         self.normalRgb = okToNormalRgb(self.oklab)
         self.rgb = normalRgbToRgb(self.normalRgb)
         # we use rgb since rgb eliminates impossible colors

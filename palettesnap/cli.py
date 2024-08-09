@@ -34,62 +34,102 @@ def gen(
     skip: Annotated[
         bool,
         typer.Option(
-            help="Skip creating templates and setting wallpaper.", rich_help_panel="Customization"
+            help="Skip creating templates and setting wallpaper.", rich_help_panel="Options"
         ),
     ] = False,
     mode : Annotated[
         str,
         typer.Option(
-            help="Theme mode. light, dark, or auto.", rich_help_panel="Customization"
+            help="Theme mode. light, dark, or auto.", rich_help_panel="Options"
         ),
     ] = "auto",
     dominant : Annotated[
         int,
         typer.Option(
-            help="Number of dominant colors to pick from image for background. Must be >= 2.", rich_help_panel="Customization"
+            help="Number of dominant colors to pick from image for background. Must be >= 2.", rich_help_panel="Options"
         ),
     ] = 5,
-    variety: Annotated[
-        str,
+    extra: Annotated[
+        bool,
         typer.Option(
-            help="default, extra, or mix.", rich_help_panel="Customization"
+            help="Toggles extra colors.", rich_help_panel="Variety"
         ),
-    ] = "default",
+    ] = False,
+    mix: Annotated[
+        bool,
+        typer.Option(
+            help="Toggles extra colors.", rich_help_panel="Variety"
+        ),
+    ] = False,
+    tweak: Annotated[
+        bool,
+        typer.Option(
+            help="Toggles extra colors.", rich_help_panel="Variety"
+        ),
+    ] = False,
     sample : Annotated[
         int,
         typer.Option(
             help="Number of colors to sample from images to find accent colors.",
-            rich_help_panel="Customization"
+            rich_help_panel="Options"
         ),
     ] = 10000,
     mixAmount: Annotated[
         float,
         typer.Option(
             "--mixAmount", "-ma",
-            help="Percentage amount accent color should be mixed with picked color. 0 to 1.", rich_help_panel="Customization"
+            help="Percentage amount accent color should be mixed with picked color. 0 to 1.", rich_help_panel="Mix Settings"
         ),
     ] = 0.1,
     mixThreshold : Annotated[
         float,
         typer.Option(
             "--mixThreshold", "-mt",
-            help="Distance threshold for mixing.", rich_help_panel="Customization"
+            help="Distance threshold for mixing.", rich_help_panel="Mix Settings"
         ),
     ] = 0.16,
     weight : Annotated[
         int,
         typer.Option(
             help="Uniqueness weight for optimization. Larger means more unique.",
-            rich_help_panel="Customization"
+            rich_help_panel="Options"
         ),
     ] = 100,
     cache : Annotated[
         str,
         typer.Option(
             help="Name of palette to be cached as.",
-            rich_help_panel="Customization"
+            rich_help_panel="Options"
         ),
-    ] = None
+    ] = None,
+    hueThreshold : Annotated[
+        float,
+        typer.Option(
+            "--hueThreshold", "-ht",
+            help="Distance threshold for hue.", rich_help_panel="Tweak Settings"
+        ),
+    ] = 10.0,
+    hueFactor : Annotated[
+        float,
+        typer.Option(
+            "--hueFactor", "-hf",
+            help="Factor of defined accent color hue. 0 to 1.", rich_help_panel="Tweak Settings"
+        ),
+    ] = 1.0,
+    chromaThreshold : Annotated[
+        float,
+        typer.Option(
+            "--chromaThreshold", "-ct",
+            help="Threshold for chroma.", rich_help_panel="Tweak Settings"
+        ),
+    ] = 3.0,
+    chromaFactor : Annotated[
+        float,
+        typer.Option(
+            "--chromaFactor", "-cf",
+            help="Factor of defined accent color chroma. 0 to 1.", rich_help_panel="Tweak Settings"
+        ),
+    ] = 0.25,
 ):
     '''
     Generates color palette given path to image and optional arguments.
@@ -98,8 +138,6 @@ def gen(
     # precheck
     if mode not in ["auto", "light", "dark"]:
         raise typer.BadParameter(f"{mode} is not a valid mode. Allowed values are auto, light, and dark.")
-    if variety not in ["default", "extra", "mix"]:
-        raise typer.BadParameter(f"{variety} is not a valid color variety type. Allowed values are default, extra, and mix.")
     if dominant <= 1:
         console.log("Illegal number of dominant colors.")
     if mode == "auto" and dominant != 5:
@@ -108,7 +146,7 @@ def gen(
     if skip:
         start = time.time()
         # Only create palette
-        palette = extractPalette(path, mode, dominant, variety, sample, mixAmount, mixThreshold, weight, True)
+        palette = extractPalette(path, mode, dominant, extra, mix, tweak, sample, mixAmount, mixThreshold, weight, hueThreshold, hueFactor, chromaThreshold, chromaFactor, True)
         # cache
         if cache is not None:
             cacheSet(cache)
@@ -117,11 +155,11 @@ def gen(
     else:
         start = time.time()
         # extract palette
-        palette = extractPalette(path, mode, dominant, variety, sample, mixAmount, mixThreshold, weight, True)
+        palette = extractPalette(path, mode, dominant, extra, mix, tweak, sample, mixAmount, mixThreshold, weight, hueThreshold, hueFactor, chromaThreshold, chromaFactor, True)
         # set wallpaper background
         setWallpaper(path)
         # export templates
-        exportAll(palette, variety)
+        exportAll(palette, "deprecated")
         # cache
         if cache is not None:
             cacheSet(cache)
