@@ -6,6 +6,7 @@
 import os
 import toml
 from string import Template
+from re import sub
 
 # Internal modules
 from . import setup
@@ -16,10 +17,10 @@ from .colorClass import Color
 ###
 # PaletteSnap built-in export functions
 ###
-def exportHTML(colorVarietyFlag):
+def exportHTML():
     '''exports HTML template file for viewing'''
     path = os.path.join(setup.cache, "PaletteTest.html")
-    htmlTemplate = Template('''
+    htmlRes = '''
     <!doctype html>
 <html>
 <head>
@@ -35,7 +36,6 @@ def exportHTML(colorVarietyFlag):
 </head>
 <body>
 <h1>Test Terminal:</h1>
-More color variety: $variety
 <div><span id="red">from</span> <span id="yellow">PIL</span> <span id="red">import</span> <span id="green">ImageColor</span>
     
 <span id="comment"># Distance function</span>
@@ -56,10 +56,7 @@ More color variety: $variety
 </div>
 </body>
 </html>              
-    ''')
-    htmlRes = htmlTemplate.substitute(
-        variety = str(colorVarietyFlag)
-    )
+    '''
     # Overwrite file at path
     output = open(path, "w")
     output.write(htmlRes)
@@ -140,10 +137,14 @@ def exportCSS(colorDict : dict[str, Color]) -> None:
 def replaceVar(tempContents : str, palette : dict[str, Color]) -> str:
     '''replaces variable in template with colors in palette'''
     # replace vars with colors
+    modePattern = r"\{\{mode \| (.*?) \| (.*?)\}\}"
     for key in palette:
-        if key == "image":
-            # image
+        if key == "image" or key == "mode":
+            # image/mode
             tempContents = tempContents.replace("{{" + key + "}}", palette[key])
+            # special case for mode
+            mode = palette["mode"]
+            tempContents = sub(modePattern, lambda match: match.group(1) if mode == 'light' else match.group(2), tempContents)
         else:
             # hex
             tempContents = tempContents.replace("{{" + key + "}}", palette[key].hex)
@@ -163,47 +164,48 @@ def exportTemplates(palette : dict[str, Color]) -> None:
     console.log("Generating templates.")
     templateInfo = toml.load(setup.templateFile)
     for program in templateInfo:
-        programInfo = templateInfo[program][0] # dictionary
-        # extract information
-        for key, value in programInfo.items():
-            if key == "name":
-                name = value
-            elif key == "alias":
-                alias = value
-            elif key == "dir":
-                dir = os.path.expanduser(value)
+        programInfo : list[dict[str, str]] = templateInfo[program]
+        for tempDict in programInfo:
+            # extract information
+            for key, value in tempDict.items():
+                if key == "name":
+                    name = value
+                elif key == "alias":
+                    alias = value
+                elif key == "dir":
+                    dir = os.path.expanduser(value)
+                else:
+                    cmd = value
+            # handle empty information
+            if alias == "":
+                alias = name
+            if dir == "":
+                dir = setup.cache
+            # replace variables for template
+            tempLoc = os.path.join(setup.templateDir, name)
+            exportLoc = os.path.join(dir, alias)
+            # check if template file exists
+            if os.path.isfile(tempLoc):
+                file = open(tempLoc, "r")
+                template = file.read()
+                file.close()
+                # generate the file based on the template
+                newContents = replaceVar(template, palette)
+                with open(exportLoc, "w") as newFile:
+                    newFile.write(newContents)
+                newFile.close()
+                console.log(f"Template {name} succesfully generated.")
             else:
-                cmd = value
-        # handle empty information
-        if alias == "":
-            alias = name
-        if dir == "":
-            dir = setup.cache
-        # replace variables for template
-        tempLoc = os.path.join(setup.templateDir, name)
-        exportLoc = os.path.join(dir, alias)
-        # check if template file exists
-        if os.path.isfile(tempLoc):
-            file = open(tempLoc, "r")
-            template = file.read()
-            file.close()
-            # generate the file based on the template
-            newContents = replaceVar(template, palette)
-            with open(exportLoc, "w") as newFile:
-                newFile.write(newContents)
-            newFile.close()
-            console.log(f"Template {name} succesfully generated.")
-        else:
-            console.log(f"Template {name} does not exist.")
-        # refresh the program
-        if cmd != "":
-            refreshProgram(program, cmd)
+                console.log(f"Template {name} does not exist.")
+            # refresh the program
+            if cmd != "":
+                refreshProgram(program, cmd)
 
 ###
 # Export all
 ###
 
-def exportAll(colors : dict[str, Color], flag : str) -> None:
-    exportHTML(flag)
+def exportAll(colors : dict[str, Color]) -> None:
+    exportHTML()
     exportCSS(colors)
     exportTemplates(colors)

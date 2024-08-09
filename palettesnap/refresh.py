@@ -1,7 +1,12 @@
 ###
 # Modules
 ###
+# External modules
 import subprocess
+from os import chdir
+
+# Internal modules
+from .setup import home
 from .console import console
 
 ###

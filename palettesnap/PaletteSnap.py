@@ -183,6 +183,13 @@ def findColorHarmony(givenColor : Color) -> dict[str, Color]:
     harmonyColors["tetradic 2"] = lchColor(tetra2)
     return harmonyColors
 
+def findMode(bgColor : Color) -> str:
+    '''finds the mode of the palette if given mode is auto'''
+    if bgColor.L >= 0.5:
+        return "light"
+    else:
+        return "dark"
+
 ###
 # Manipulation Functions
 ###
@@ -273,9 +280,9 @@ def expandPalette(accentColors : dict[str, Color], givenColor : Color, palette :
 
 def exportPalette(colorDict : dict[str, Color]) -> None:
     '''exports the palette'''
-    imgDict = {key: value for key, value in colorDict.items() if key == "image"}
-    colorDict : dict[str, str] = {key : value.hex for key, value in colorDict.items() if key != "image"}
-    colorDict = imgDict | colorDict
+    strDict = {key: value for key, value in colorDict.items() if key == "image" or key == "mode"}
+    colorDict : dict[str, str] = {key : value.hex for key, value in colorDict.items() if key != "image" and key != "mode"}
+    colorDict = strDict | colorDict
     exportPath = os.path.join(setup.cache, "palette.toml")
     with open(exportPath, "w") as file:
         toml.dump(colorDict, file)
@@ -370,11 +377,15 @@ def extractPalette(imgPath : str, mode : str, dominant : int, extraFlag : bool, 
     bgGradient = findBgGradient(palette["bg0"], palette["fg"])
     palette |= bgGradient
 
-    # add image path
+    # add image path and mode
     palette["image"] = imgPath
+    if mode == "auto":
+        palette["mode"] = findMode(palette["bg0"])
+    else:
+        palette["mode"] = mode
 
     # reorder palette
-    bgOrder = ['image', 'bg0', 'bg1', 'bg2', 'bg3', 'bg4', 'bg5']
+    bgOrder = ['image', 'mode', 'bg0', 'bg1', 'bg2', 'bg3', 'bg4', 'bg5']
     reorderPalette = {key: palette[key] for key in bgOrder}
     reorderPalette.update({key: value for key, value in palette.items() if key not in reorderPalette})
     palette = reorderPalette

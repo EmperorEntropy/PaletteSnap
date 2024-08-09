@@ -159,7 +159,7 @@ def gen(
         # set wallpaper background
         setWallpaper(path)
         # export templates
-        exportAll(palette, "deprecated")
+        exportAll(palette)
         # cache
         if cache is not None:
             cacheSet(cache)

@@ -64,8 +64,8 @@ def loadCache(name : str) -> None:
     else:
         # get the palette
         textPalette : dict[str, str] = toml.load(filePath)
-        imgDict = {"image" : textPalette["image"]}
-        palette : dict[str, Color] = {key: hexColor(value) for key, value in textPalette.items() if key != "image"}
+        imgDict = {"image" : textPalette["image"], "mode" : textPalette["mode"]}
+        palette : dict[str, Color] = {key: hexColor(value) for key, value in textPalette.items() if key != "image" and key != "mode"}
         palette = imgDict | palette
         console.log("Cached file [green]succesfully[/green] loaded.")
         # overwrite palette.toml for previewing
@@ -77,7 +77,7 @@ def loadCache(name : str) -> None:
         imgPath = palette["image"]
         setWallpaper(imgPath)
         # export templates
-        exportAll(palette, "cached")
+        exportAll(palette)
 
 def loadRandomCache():
     '''loads a random cached palette'''
