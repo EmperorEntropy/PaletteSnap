@@ -112,6 +112,7 @@ def previewPalette(imageFlag) -> None:
         palette = readPalette()
         imgPath = palette["image"]
         palette.pop("image")
+        palette.pop("mode")
         # Get terminal type and print image
         terminal = getTerminal()
         showImage(imgPath, terminal)
