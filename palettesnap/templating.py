@@ -142,6 +142,8 @@ def replaceVar(tempContents : str, palette : dict[str, Color]) -> str:
         if key == "image" or key == "mode":
             # image/mode
             tempContents = tempContents.replace("{{" + key + "}}", palette[key])
+            # special case for image
+            tempContents = tempContents.replace("{{image.name}}", os.path.basename(palette[key]))
             # special case for mode
             mode = palette["mode"]
             tempContents = sub(modePattern, lambda match: match.group(1) if mode == 'light' else match.group(2), tempContents)

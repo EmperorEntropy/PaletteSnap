@@ -4,6 +4,7 @@
 # External modules
 import subprocess
 from os import chdir
+from shlex import split
 
 # Internal modules
 from .setup import home
@@ -27,4 +28,5 @@ def refreshProgram(program, cmd):
     '''refresh opened programs'''
     if isProgramOpen(program):
         console.log(f"Refreshing [u]{program}[/u]")
-        subprocess.run(cmd.split())
+        cmdList = split(cmd)
+        subprocess.run(cmdList)
