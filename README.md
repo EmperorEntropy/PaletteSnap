@@ -27,6 +27,17 @@ Note that PaletteSnap depends on many dependencies, and it might take a while fo
 
 https://github.com/user-attachments/assets/5afe9fac-1e76-48cf-af2e-3f04894dfc3a
 
+## Examples
+![](https://snipboard.io/1qmeQW.jpg)
+
+![](https://snipboard.io/Ip5cmw.jpg)
+
+![](https://snipboard.io/Bz312i.jpg)
+
+![](https://snipboard.io/v0yMEf.jpg)
+
+![](https://snipboard.io/GisUZQ.jpg)
+
 ## Features
 - Generates a color palette from any image.
 - Color palette are guaranteed to be readable with good contrast.
