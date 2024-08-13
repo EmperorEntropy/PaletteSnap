@@ -11,7 +11,6 @@
     <img alt="Pepy Total Downlods" src="https://img.shields.io/pepy/dt/palettesnap?style=flat-square&color=red">
     </p>
 </header>
----
 
 **The README file gives you a "snap" of PaletteSnap. Consult the [Wiki](https://github.com/EmperorEntropy/PaletteSnap/wiki) for more detailed information.**
 
