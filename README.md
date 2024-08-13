@@ -8,31 +8,14 @@
     <img alt="Static Badge" src="https://img.shields.io/badge/pip_install-palettesnap-blue?style=flat-square">
     <img alt="PyPI - Python Version" src="https://img.shields.io/pypi/pyversions/palettesnap?style=flat-square&color=green">
     <img alt="PyPI - Version" src="https://img.shields.io/pypi/v/palettesnap?style=flat-square&label=PaletteSnap&link=https%3A%2F%2Fpypi.org%2Fproject%2Fpalettesnap%2F">
-    <img alt="PyPI - Downloads" src="https://img.shields.io/pypi/dd/palettesnap?style=flat-square&color=red">
+    <img alt="Pepy Total Downlods" src="https://img.shields.io/pepy/dt/palettesnap?style=flat-square&color=red">
     </p>
 </header>
-
-**At the time of writing, PaletteSnap is in early Alpha. Many things are expected to be changed, and it is likely that new features will be added. Feel free to make suggestions.**
-
 ---
 
-# Examples
-`palsnap gen image.jpg`
-![](https://snipboard.io/1qmeQW.jpg)
+**The README file gives you a "snap" of PaletteSnap. Consult the [Wiki](https://github.com/EmperorEntropy/PaletteSnap/wiki) for more detailed information.**
 
-`palsnap gen image.jpg --variety mix`
-![](https://snipboard.io/Ip5cmw.jpg)
-
-`palsnap gen image.jpg --variety mix`
-![](https://snipboard.io/Bz312i.jpg)
-
-`palsnap gen image.jpg --mode light --variety mix -mt 0.14`
-![](https://snipboard.io/v0yMEf.jpg)
-
-`palsnap gen image.jpg --mode light --sample 100 --variety mix`
-![](https://snipboard.io/GisUZQ.jpg)
-
-# Installation
+## Installation
 PaletteSnap is a python program, so Python is needed. It can be installed via pip:
 ```
 pip install palettesnap
@@ -41,6 +24,39 @@ It is not recommended to install PaletteSnap via the Github repository due to ch
 
 Note that PaletteSnap depends on many dependencies, and it might take a while for it to execute during its first run.
 
+## Demonstration
+
+https://github.com/user-attachments/assets/5afe9fac-1e76-48cf-af2e-3f04894dfc3a
+
+## Features
+- Generates a color palette from any image.
+- Color palette are guaranteed to be readable with good contrast.
+- Options to increase color variety for palette. Useful for monochromatic images.
+- Assigned color roles. No more guessing which color does want with the palette.
+- Sets wallpaper to your image automatically.
+- Uses templates so that you can apply the color palette to your entire system.
+- Has caching so you can load pre-generated palettes fast.
+- Supports program refreshing. No more closing and reopening programs to get them to update their palette.
+- Auto checks for updates. Get notified when a new version gets released.
+
+### Comparison
+Here is a table that compares PaletteSnap with pywal:
+|                               |      **pywal**     |   **PaletteSnap**  |
+|:-----------------------------:|:------------------:|:------------------:|
+|       **Palette Generation**      | :white_check_mark: | :white_check_mark: |
+|     **Wallpaper Setting**     | :white_check_mark: | :white_check_mark: |
+|         **Templating**        | :white_check_mark: | :white_check_mark: |
+|      **Readable Palette**     |      :warning:     | :white_check_mark: |
+| **Assigned Color Roles** |         :x:        | :white_check_mark: |
+| **Color Variety Options** |         :x:        | :white_check_mark: |
+|     **Refreshes Programs**    |         :x:        | :white_check_mark: |
+|  **Custom Background Color**  | :white_check_mark: |         :warning:        |
+|    **Cached colorschemes**    | :white_check_mark: | :white_check_mark: |
+|    **Color palette modes**    |  :warning: |     :white_check_mark:     |
+|     **Random palette**        | :white_check_mark: | :white_check_mark: |
+|     **Update Checker**    |         :x:        | :white_check_mark: |
+
+### Wallpaper Setting
 PaletteSnap's functionality is supported by all OS that has Python. However, the wallpaper switching functionality may not be supported for certain OS. Here is a list of all OS that PaletteSnap's wallpaper switching supports:
 - macOS (tested)
 - GNOME Linux (untested)
@@ -50,130 +66,50 @@ PaletteSnap's functionality is supported by all OS that has Python. However, the
 
 If you have one of the untested OS, and it works, please let me know. If you have an OS that is not on the list, feel free to suggest it!
 
-# Features
-- Generates a color palette from any image.
-- Color palette are guaranteed to be readable with good contrast.
-- Assigned color roles. No more guessing which color does want with the palette.
-- Sets wallpaper to your image automatically.
-- Uses templates so that you can apply the color palette to your entire system.
-- Supports program refreshing. No more closing and reopening programs to get them to update their palette.
-- Options to increase color variety for palette. Useful for monochromatic images.
+## Usage
+When generating the palette, PaletteSnap creates two folders. They are
+- `XDG_CONFIG_HOME/palsnap`
+- `XDG_CACHE_HOME/palsnap`
 
-## Comparison
-Here is a table that compares PaletteSnap with pywal:
-|                               |      **pywal**     |   **PaletteSnap**  |
-|:-----------------------------:|:------------------:|:------------------:|
-|       **Palette Generation**      | :white_check_mark: | :white_check_mark: |
-|     **Wallpaper Setting**     | :white_check_mark: | :white_check_mark: |
-|         **Templating**        | :white_check_mark: | :white_check_mark: |
-|      **Readable Palette**     |      :warning:     | :white_check_mark: |
-| **More Color Variety Option** |         :x:        | :white_check_mark: |
-|     **Refreshes Programs**    |         :x:        | :white_check_mark: |
-|  **Custom background color**  | :white_check_mark: |         :x:        |
-|    **Cached colorschemes**    | :white_check_mark: | :white_check_mark: |
-|    **Color palette modes**    |  :warning: |     :white_check_mark:     |
-|     **Random palette**        | :white_check_mark: | :white_check_mark: |
+On a macOS, they are `~/.config/palsnap/` and `~/.cache/palsnap/`. The folders palsnap can be found in are the same folders pywal's config and cache are found in.
 
-Note that many convenient features of pywal will be added to PaletteSnap in the future.
+*For the sake of convenience, the locations of these folders will be referred to as macOs's in the rest of the README file.*
 
-# Usage
-When generating the palette, PaletteSnap creates two folders. On a macOS, they are
-- `~/.config/palsnap/`
-- `~/.cache/palsnap/`
-
-This is very similar to what pywal does. For non-macOS systems, it generates the palsnap folders based on the `XDG_CONFIG_HOME` and `XDG_CACHE_HOME` environments.
-
-## Palette Generation
+### Palette Generation
 To generate a palette, run the following command:
 `palsnap gen <img_path>`
-This is the simplest way to generate a palette. If you run `palsnap gen --help`, you'll notice there is a list of options:
-- `mode`: theme mode (light/dark/auto)
-- `dominant` : number of dominant colors to use when finding bg color (must have light/dark mode)
-- `variety`: color variety type (default/extra/mix)
-- `sample`: number of colors to sample from image when finding accent color step
-- `mixAmount`: amount to mix accent colors with chosen color for each iteration
-- `mixThreshold`: distance threshold for colors until mixing stops
-- `weight`: uniqueness weight for lighting optimization
-- `cache`: caches the palette according to the given name
-
-`extra` introduces extra colors with color harmony to improve color variety in the palette. `mix` refines the color palette by mixing the chosen colors with the original colors (red, green, etc.) to try to make them as close as possible to a "standard" colorscheme.
+This is the simplest way to generate a palette. If you run `palsnap gen -h`, you'll notice there is a list of options.
 
 If you keep hitting the *manual optimization* for your generated palette, this is usually a sign that your current options are not good. If you haven't already, an easy way to avoid it is to set your `mode` to either light or dark instead of auto.
 
+**See [Palette Generation](https://github.com/EmperorEntropy/PaletteSnap/wiki/Palette-Generation) for further information.**
+
 ### Preview
-In order to preview a palette, you must first generate it. You can skip all the other steps in the process by running
-`palsnap gen <img_path> --skip`. After that, run `palsnap preview` to preview the palette. The output will be the image (only for certain terminals) and all the colors. Your terminal window must be big enough to see all the colors. 
+In order to preview a palette, you must first generate it. You can skip all the other steps in the process by running `palsnap gen <img_path> --skip`. After that, run `palsnap preview` to preview the palette. The output will be the image (only for certain terminals) and all the colors. Your terminal window must be big enough to see all the colors. 
 
 If you want a more direct approach, in the `~/.cache/palsnap` folder, there should be a `PaletteTest.html`. You can use it to see what your palette will actually look like if you use it.
 
-## Templating
-All templating information is done in `~/.config/palsnap/templates.toml`. Here is an example of what the file could look like:
-```
-[[sioyek]]
-name = "sioyek.config"
-alias = "prefs.config"
-dir = "/Applications/sioyek.app/Contents/MacOS/"
-cmd = ""
+**See [Previewing](https://github.com/EmperorEntropy/PaletteSnap/wiki/Previewing) for further information.**
 
-[[sketchybar]]
-name = "sketchybarrc"
-alias = ""
-dir = "~/.config/sketchybar/"
-cmd = "sketchybar --reload"
-```
-Explanations:
-- `[[<process_name>]]` is the process name of the program. **It is important that the name corresponds to the program's process when opened**. If your program is open, running `pgrep -a <process_name>` should show a numerical ID.
-- `name` is the name of the template file. It should include the file name extension and should be located in `~/.config/palsnap/templates` folder.
-- `alias` is the name you want the template file to have upon generation.
-- `dir` is the directory where the template file will generate in.
-- `cmd` is the **refresh command**. Sometimes, you might want to change your colorscheme when some programs are open. PaletteSnap will run this shell command to refresh the program.
+### Templating
+All templating information is done in `~/.config/palsnap/templates.toml` and templates are stored in the templates folder found at `~/.config/palsnap/templates/`.
 
-Once you set up the information about the template, you place your template in the `~/.config/palsnap/templates` folder. Variables in the template are represented as words surrounded by `{{` and `}}`. Here is a list of all the variables:
-```
-{{image}}
-{{fg}}
-{{bg0}}
-{{bg1}}
-{{bg2}}
-{{bg3}}
-{{bg4}}
-{{bg5}}
-{{black}}
-{{red}}
-{{orange}}
-{{yellow}}
-{{green}}
-{{blue}}
-{{cyan}}
-{{magenta}}
-{{violet}}
-{{white}}
-```
-The variables are replaced with the corresponding colors in hex. For hex values without #, use something like `{{cyan.digits}}`. RGB colors can be represented as
-```
-{{magenta.r}} {{magenta.g}} {{magenta.b}}
-```
-Normalized rgb values are
-```
-{{magenta.nr}} {{magenta.ng}} {{magenta.nb}}
-```
+**See [Templating](https://github.com/EmperorEntropy/PaletteSnap/wiki/Templating) for further information.**
 
-## Caching
+### Caching
 To save time, it is possible to cache palettes. You can either cache palettes as you generate them with the `--cache` option, or you can cache the palette right after generating it with:
 ```
-palsnap cache <name>
+palsnap cache set <name>
 ```
-The latter method is useful if you want to generate and preview the palette before caching it.
+The latter method is useful if you want to generate and preview the palette before caching it. There are many other cache commands like `load`, `clear`, `rename`, etc.
 
-You can load cached palettes with `palsnap load <name>`, and you can delete them with `palsnap clear <name>`. If you want a random cached palette, you can get it with `palsnap load random`.
+**See [Caching](https://github.com/EmperorEntropy/PaletteSnap/wiki/Caching) for further information.**
 
-`palsnap clear all` removes all the cached palettes. Finally, you can see a list of all the cached palettes you created with `palsnap list`.
-
-## Color Palette
+### Color Palette
 Based on Everforest's palette usage,
 | Identifier | Usages |
 |---|---|
-| `bg0` | Default Background |
+| `bg` | Default Background |
 | `bg1` | Unused |
 | `bg2` | Unused |
 | `bg3` | Comment color |
@@ -193,22 +129,16 @@ Based on Everforest's palette usage,
 
 `cusor_bg` is usually just the foreground. `cursor_fg` is usually just the background.
 
-# Supported Applications
-PaletteSnap's flexibilty makes it possible for it to support any application with customizable colors. For sake of convenience, below are all the applications that are confirmed to work with their respective refresh commands, if needed:
-| **Program** | **Command** |        **Additional Info**        |
-|:-----------:|:-----------:|:---------------------------------:|
-|   Wezterm   |      NA     | Wezterm auto refreshes its config |
-|   Sioyek    |      NA     | Sioyek auto refreshes its config  |
-|  Sketchybar |     `sketchybar --reload`        |  Sketchybar can auto refresh its config with hotloading.                                 |
+**See [Color Roles](https://github.com/EmperorEntropy/PaletteSnap/wiki/Color-Roles) for further information.**
 
-This section will be expanded on with more detailed information.
-
-# To Do
+## To Do
+- Add option for users to define number of bg gradients.
+- Add more flexibilty to determine bg.
+- Add check for templating that returns list of variables not replaced.
 - Add wallpaper setting support for more Linux distributions.
 - Add image preview support for more terminals.
-- Add extra variety/option to tweak finally palettes with Oklch color space to prevent similar colors.
 
-# Acknowledgments
+## Acknowledgments
 - [pywal](https://github.com/dylanaraps/pywal) for the inspriation that led me to create PaletteSnap
 - [ozwaldorf](https://github.com/ozwaldorf/) for helpful suggestions and advice during PaletteSnap's initial development. Check out [lutgen](https://github.com/ozwaldorf/lutgen-rs), a program that themes any image to a desktop colorscheme.
 - [Everforest colorscheme](https://github.com/sainnhe/everforest/) for its colorscheme usage.

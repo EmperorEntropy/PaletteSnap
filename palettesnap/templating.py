@@ -69,7 +69,7 @@ def exportCSS(colorDict : dict[str, Color]) -> None:
     cssTemplate = Template('''
     div {
         color: $fg;
-        background-color: $bg0;
+        background-color: $bg;
         border: 3px solid $fg;
     }
     ::-moz-selection { /* Code for Firefox */
@@ -115,7 +115,7 @@ def exportCSS(colorDict : dict[str, Color]) -> None:
 
     cssRes = cssTemplate.substitute(
         fg = colorDict["fg"].hex,
-        bg0 = colorDict["bg0"].hex,
+        bg = colorDict["bg"].hex,
         comment = commentColor,
         selection = selectionColor,
         red = colorDict["red"].hex,

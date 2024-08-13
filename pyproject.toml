@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "palettesnap"
-version = "0.0.2"
-description = "A colorscheme generator"
+version = "1.0.0"
+description = "A color palette generator"
 authors = ["EmperorEntropy"]
 readme = "README.md"
 license = "MIT"

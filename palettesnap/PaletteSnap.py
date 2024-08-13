@@ -94,7 +94,7 @@ def findBgGradient(bgColor : Color, fgColor : Color) -> dict[str, Color]:
     # Get 5 gradient colors from background to foreground
     gradient = np.linspace(bgColor.oklab, fgColor.oklab, 7)
     gradient = [Color(*tuple(labColor)) for labColor in gradient]
-    for i in range(6):
+    for i in range(1, 6):
         bgDict[f"bg{i}"] = gradient[i]
     return bgDict
 
@@ -210,7 +210,7 @@ def processImage(imgPath : str) -> npt.NDArray[any]:
 def adjustAccents(colorDict : dict[str, Color], weight : int) -> dict[str, Color]:
     '''adjusts lightness of accents based on background'''
     # based on https://github.com/jan-warchol/selenized/blob/master/balancing-lightness-of-colors.md
-    bgLightness = colorDict["bg0"].cielab[0]
+    bgLightness = colorDict["bg"].cielab[0]
     # adjust the lightness
     newAccents = performOptimal(bgLightness, colorDict, weight)
     return newAccents
@@ -255,7 +255,7 @@ def pickColors(imgPath : str, accentColors : dict[str, Color], mode : str, domin
     # Background
     console.log("Finding background color.")
     bg = findBackground(labColors, mode, dominant)
-    palette["bg0"] = bg
+    palette["bg"] = bg
     # Foreground
     console.log("Finding foreground color.")
     fg = findForeground(bg, labColors)
@@ -329,7 +329,7 @@ def extractPalette(imgPath : str, mode : str, dominant : int, extraFlag : bool, 
     # harmony colors
     if extraFlag:
         console.log("Finding extra colors to improve color variety.")
-        bgColor = palette["bg0"]
+        bgColor = palette["bg"]
         fgColor = palette["fg"]
         palette = {key: [value] for key, value in palette.items()}
         console.log("Getting colors harmonious to background.")
@@ -374,18 +374,18 @@ def extractPalette(imgPath : str, mode : str, dominant : int, extraFlag : bool, 
 
     # background gradient
     console.log("Generating background gradient.")
-    bgGradient = findBgGradient(palette["bg0"], palette["fg"])
+    bgGradient = findBgGradient(palette["bg"], palette["fg"])
     palette |= bgGradient
 
     # add image path and mode
     palette["image"] = imgPath
     if mode == "auto":
-        palette["mode"] = findMode(palette["bg0"])
+        palette["mode"] = findMode(palette["bg"])
     else:
         palette["mode"] = mode
 
     # reorder palette
-    bgOrder = ['image', 'mode', 'bg0', 'bg1', 'bg2', 'bg3', 'bg4', 'bg5']
+    bgOrder = ['image', 'mode', 'bg', 'bg1', 'bg2', 'bg3', 'bg4', 'bg5']
     reorderPalette = {key: palette[key] for key in bgOrder}
     reorderPalette.update({key: value for key, value in palette.items() if key not in reorderPalette})
     palette = reorderPalette
