@@ -53,6 +53,7 @@ Here is a table that compares PaletteSnap with pywal:
 |     **Wallpaper Setting**     | :white_check_mark: | :white_check_mark: |
 |         **Templating**        | :white_check_mark: | :white_check_mark: |
 |      **Readable Palette**     |      :warning:     | :white_check_mark: |
+|      **Preview Palette**     |      :white_check_mark:    | :white_check_mark: |
 | **Assigned Color Roles** |         :x:        | :white_check_mark: |
 | **Color Variety Options** |         :x:        | :white_check_mark: |
 |     **Refreshes Programs**    |         :x:        | :white_check_mark: |
