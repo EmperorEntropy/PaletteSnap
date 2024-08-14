@@ -12,9 +12,13 @@ from .console import console
 ###
 # Main functions
 ###
-def findCurrVersion() -> str:
+def findCurrVersion() -> str | None:
     '''returns user-installed version'''
-    res = subprocess.run(['pip', 'show', 'palettesnap'], capture_output=True).stdout.decode("utf-8")
+    proc = subprocess.run(['pip', 'show', 'palettesnap'], capture_output=True)
+    if proc.returncode != 0:
+        # pip failed to find palettesnap
+        return None
+    res = proc.stdout.decode("utf-8")
     version = res.splitlines()[1]
     version = version.split(" ")[1]
     return version
@@ -34,7 +38,7 @@ def outdatedCheck() -> None:
     '''check if user-installed version is outdated or not'''
     current = findCurrVersion()
     latest = findLatestVersion()
-    if latest == None:
+    if latest is None or current is None:
         console.log("Failed to check for palettesnap updates.")
     elif current != latest:
         console.log("Your version of palettesnap is [red]outdated[/red].")
