@@ -139,13 +139,15 @@ Based on Everforest's palette usage,
 
 ## To Do
 - Add option for users to define number of bg gradients.
-- Add more flexibilty to determine bg.
+- Add more flexibility to determine bg.
 - Add check for templating that returns list of variables not replaced.
+- Add h, s, l variables for templating.
 - Add wallpaper setting support for more Linux distributions.
 - Add image preview support for more terminals.
 
 ## Acknowledgments
-- [pywal](https://github.com/dylanaraps/pywal) for the inspriation that led me to create PaletteSnap
+- [pywal](https://github.com/dylanaraps/pywal) for the inspiration that led me to create PaletteSnap.
+- Contributors in pull requests for adding or fixing features.
 - [ozwaldorf](https://github.com/ozwaldorf/) for helpful suggestions and advice during PaletteSnap's initial development. Check out [lutgen](https://github.com/ozwaldorf/lutgen-rs), a program that themes any image to a desktop colorscheme.
 - [Everforest colorscheme](https://github.com/sainnhe/everforest/) for its colorscheme usage.
 - [Solarized](https://github.com/altercation/solarized) and [Selenized](https://github.com/jan-warchol/selenized) colorschemes for giving me valuable insights on what a palette should be like.
