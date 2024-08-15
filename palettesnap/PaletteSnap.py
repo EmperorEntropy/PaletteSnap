@@ -207,12 +207,12 @@ def processImage(imgPath : str) -> npt.NDArray[any]:
     labColors = labColors.reshape((-1,3))
     return labColors
 
-def adjustAccents(colorDict : dict[str, Color], weight : int) -> dict[str, Color]:
+def adjustAccents(colorDict : dict[str, Color], iterations : int, weight : int) -> dict[str, Color]:
     '''adjusts lightness of accents based on background'''
     # based on https://github.com/jan-warchol/selenized/blob/master/balancing-lightness-of-colors.md
     bgLightness = colorDict["bg"].cielab[0]
     # adjust the lightness
-    newAccents = performOptimal(bgLightness, colorDict, weight)
+    newAccents = performOptimal(bgLightness, colorDict, iterations, weight)
     return newAccents
 
 def findClosestColor(colorDict : dict[str, Color], labColor : Color) -> str:
@@ -316,7 +316,7 @@ def mixPalette(accentColors : dict[str, Color], palette : dict[str, Color], mixA
 # Main Function
 ###
 def extractPalette(imgPath : str, mode : str, dominant : int, extraFlag : bool, mixFlag : bool, tweakFlag : bool,  
-                   numSample : int, mixAmount : float, mixThreshold : float, weight : int, 
+                   numSample : int, mixAmount : float, mixThreshold : float, iterations : int, weight : int, 
                    hueThreshold, hueFactor, chromaThreshold, chromaFactor, adjust : bool) -> dict[str, Color]:
     '''extracts the palette from the image'''
     # Get the accent values
@@ -369,7 +369,7 @@ def extractPalette(imgPath : str, mode : str, dominant : int, extraFlag : bool, 
     # adjusting
     if adjust:
         console.log(f"Adjusting palette with uniqueness weight {weight}.")
-        newPalette = adjustAccents(palette, weight)
+        newPalette = adjustAccents(palette, iterations, weight)
         palette = {**palette, **newPalette}
 
     # background gradient

@@ -51,16 +51,11 @@ def constraint_2(a):
 warnings.filterwarnings("ignore", message="delta_grad == 0.0. Check if the approximated function is linear.")
 warnings.filterwarnings("ignore", message="Singular Jacobian matrix. Using SVD decomposition to perform the factorizations.")
 
-def performOptimal(bgLight : int | float, palette : dict[str, Color], weight : int) -> dict[str, Color]:
+def performOptimal(bgLight : int | float, palette : dict[str, Color], iterations : int, weight : int) -> dict[str, Color]:
     '''performs optimization on the lightness of the accent colors'''
     # set up initial values
     lightDict = {key: value for key, value in palette.items() if "bg" not in key}
     lightList = [lightDict[key].cielab[0] for key in lightDict]
-
-    #print(bgLight)
-    #print(f"Oklab bg: {palette["bg0"].L}")
-    #print(lightList)
-
     original_values = lightList.copy()
     length = len(original_values)
     bounds = Bounds([0] * length, [100] * length)  # bounds between 0 and 100
@@ -69,11 +64,10 @@ def performOptimal(bgLight : int | float, palette : dict[str, Color], weight : i
             {'type': 'ineq', 'fun': constraint_2}]
     # extract and print result
     console.log("Optimizing palette colors for good contrast.")
-    result = minimize(penalty_function, lightList, args=(original_values, weight), bounds=bounds, constraints=cons, method='trust-constr', options={'disp': False, 'maxiter': 10000})
+    result = minimize(penalty_function, lightList, args=(original_values, weight), bounds=bounds, constraints=cons, method='trust-constr', options={'disp': False, 'maxiter': iterations})
     if result.success:
         console.log("Optimization [green]succeed[/green].")
         optimized_values = result.x
-        #print(optimized_values)
         # return new accent colors
         newLightDict = dict(zip(lightDict.keys(), optimized_values))
         newAccents = dict()
@@ -84,7 +78,17 @@ def performOptimal(bgLight : int | float, palette : dict[str, Color], weight : i
     else:
         console.log("Current optimization method [red]failed[/red].")
         console.log("Trying new optimization method.")
-        result = minimize(penalty_function, lightList, args=(original_values, weight), bounds=bounds, constraints=cons, method='SLSQP', options={'disp': False, 'maxiter': 10000})
+        # Redo bounds and constraints
+        fgLight = palette["fg"].cielab[0]
+        if fgLight > bgLight:
+            lightThreshold = bgLight + 33
+            newBounds = Bounds([lightThreshold] * length, [100] * length)
+        else:
+            lightThreshold = bgLight - 33
+            newBounds = Bounds([0] * length, [lightThreshold] * length)
+        newCons = [{'type': 'ineq', 'fun': constraint_2}]
+        # Try it again
+        result = minimize(penalty_function, lightList, args=(original_values, weight), bounds=newBounds, constraints=newCons, method='trust-constr', options={'disp': False, 'maxiter': iterations})
         if result.success:
             console.log("Backup optimization [green]succeed[/green].")
             optimized_values = result.x
@@ -104,13 +108,9 @@ def performOptimal(bgLight : int | float, palette : dict[str, Color], weight : i
             fgLight = palette["fg"].cielab[0]
             if fgLight > bgLight:
                 lightThreshold = bgLight + 33
-                #lightRange = (lightThreshold, 100)
             else:
                 lightThreshold = bgLight - 33
-                #lightRange = (0, lightThreshold)
-            #optimized_values = [random.uniform(*lightRange) for _ in range(length)]
             optimized_values = [lightThreshold] * length
-            #print(optimized_values)
             # return new accent colors
             newLightDict = dict(zip(lightDict.keys(), optimized_values))
             newAccents = dict()

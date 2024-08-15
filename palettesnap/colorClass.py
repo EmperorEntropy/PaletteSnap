@@ -136,6 +136,5 @@ class Color():
         return f"{self.hex} \033[48;2;{red};{green};{blue}m   \033[0m"
     
     def findDist(self, other):
-        '''computes distance btw two colors'''
+        '''computes distance between two colors'''
         return ((self.L - other.L)**2+(self.a - other.a)**2+(self.b - other.b)**2)**0.5
-

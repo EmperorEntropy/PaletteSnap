@@ -88,6 +88,14 @@ def gen(
             help="Distance threshold for mixing.", rich_help_panel="Mix Settings"
         ),
     ] = 0.16,
+    iterations : Annotated[
+        int,
+        typer.Option(
+            "--iterations", "-i",
+            help="Number of iterations for optimization to run.",
+            rich_help_panel="Options"
+        ),
+    ] = 10000,
     weight : Annotated[
         int,
         typer.Option(
@@ -146,7 +154,7 @@ def gen(
     if skip:
         start = time.time()
         # Only create palette
-        palette = extractPalette(path, mode, dominant, extra, mix, tweak, sample, mixAmount, mixThreshold, weight, hueThreshold, hueFactor, chromaThreshold, chromaFactor, True)
+        palette = extractPalette(path, mode, dominant, extra, mix, tweak, sample, mixAmount, mixThreshold, iterations, weight, hueThreshold, hueFactor, chromaThreshold, chromaFactor, True)
         # cache
         if cache is not None:
             cacheSet(cache)
@@ -155,7 +163,7 @@ def gen(
     else:
         start = time.time()
         # extract palette
-        palette = extractPalette(path, mode, dominant, extra, mix, tweak, sample, mixAmount, mixThreshold, weight, hueThreshold, hueFactor, chromaThreshold, chromaFactor, True)
+        palette = extractPalette(path, mode, dominant, extra, mix, tweak, sample, mixAmount, mixThreshold, iterations, weight, hueThreshold, hueFactor, chromaThreshold, chromaFactor, True)
         # set wallpaper background
         setWallpaper(path)
         # export templates

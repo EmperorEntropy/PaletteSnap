@@ -103,13 +103,7 @@ def exportCSS(colorDict : dict[str, Color]) -> None:
         color: $cyan !important;
     }              
     ''')
-    # comment and selection color dependent on mode
-    # if paletteMode == "light":
-    #     commentColor = colorDict["bg2"]
-    #     selectionColor = colorDict["bg5"]
-    # else:
-    #     commentColor = colorDict["bg3"]
-    #     selectionColor = colorDict["bg4"]
+    # comment and selection color
     commentColor = colorDict["bg3"].hex
     selectionColor = colorDict["bg4"].hex
 
