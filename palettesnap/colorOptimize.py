@@ -63,10 +63,10 @@ def performOptimal(bgLight : int | float, palette : dict[str, Color], iterations
     cons = [{'type': 'ineq', 'fun': constraint_1(bgLight)},
             {'type': 'ineq', 'fun': constraint_2}]
     # extract and print result
-    console.log("Optimizing palette colors for good contrast.")
+    console.log(f"Optimizing palette colors for good contrast with {iterations} as maximum number of iterations.")
     result = minimize(penalty_function, lightList, args=(original_values, weight), bounds=bounds, constraints=cons, method='trust-constr', options={'disp': False, 'maxiter': iterations})
     if result.success:
-        console.log("Optimization [green]succeed[/green].")
+        console.log(f"Optimization [green]succeed[/green].")
         optimized_values = result.x
         # return new accent colors
         newLightDict = dict(zip(lightDict.keys(), optimized_values))

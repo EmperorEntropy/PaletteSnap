@@ -67,7 +67,7 @@ Here is a table that compares PaletteSnap with pywal:
 PaletteSnap's functionality is supported by all OS that has Python. However, the wallpaper switching functionality may not be supported for certain OS. Here is a list of all OS that PaletteSnap's wallpaper switching supports:
 - macOS (tested)
 - GNOME Linux (untested)
-- KDE Plasma Linux (untested)
+- KDE Plasma Linux (tested)
 - XFCE Linux (untested)
 - MATE Linux (untested)
 
@@ -142,7 +142,6 @@ Based on Everforest's palette usage,
 - Add option for users to define number of bg gradients.
 - Add more flexibility to determine bg.
 - Add check for templating that returns list of variables not replaced.
-- Add h, s, l variables for templating.
 - Add wallpaper setting support for more Linux distributions.
 - Add image preview support for more terminals.
 

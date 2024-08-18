@@ -153,6 +153,10 @@ def replaceVar(tempContents : str, palette : dict[str, Color]) -> str:
             tempContents = tempContents.replace("{{" + key + ".nr}}", str(palette[key].normalRgb[0]))
             tempContents = tempContents.replace("{{" + key + ".ng}}", str(palette[key].normalRgb[1]))
             tempContents = tempContents.replace("{{" + key + ".nb}}", str(palette[key].normalRgb[2]))
+            # hsl
+            tempContents = tempContents.replace("{{" + key + ".h}}", str(palette[key].hsl[0]))
+            tempContents = tempContents.replace("{{" + key + ".s}}", str(palette[key].hsl[1]))
+            tempContents = tempContents.replace("{{" + key + ".l}}", str(palette[key].hsl[2]))
     return tempContents
 
 def exportTemplates(palette : dict[str, Color]) -> None:
