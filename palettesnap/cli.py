@@ -9,7 +9,7 @@ from .wallpaper import setWallpaper
 from .templating import exportAll
 from .console import console
 from .preview import previewPalette
-from .cache import cacheSet, loadCache, loadRandomCache, removeCache, clearCache, listCache, renameCache
+from .cache import cacheSet, loadCache, loadRandomCache, removeCache, clearCache, listCache, renameCache, checkAll
 from .outdatedCheck import outdatedCheck
 
 # External Modules
@@ -286,9 +286,18 @@ def cache_rename(
         typer.Argument(help="New name for cached palette.")
     ],
 ):
-    '''Renames cached palette.'''
+    '''Renames a cached palette.'''
     start = time.time()
     outdatedCheck()
     renameCache(oldName, newName)
+    end = time.time()
+    console.log(f"Process [green]completed[/green] in {end-start} seconds.")
+
+@cache_app.command("check")
+def cache_check():
+    '''Checks all the cached palettes.'''
+    start = time.time()
+    outdatedCheck()
+    checkAll()
     end = time.time()
     console.log(f"Process [green]completed[/green] in {end-start} seconds.")

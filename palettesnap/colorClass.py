@@ -138,3 +138,17 @@ class Color():
     def findDist(self, other):
         '''computes distance between two colors'''
         return ((self.L - other.L)**2+(self.a - other.a)**2+(self.b - other.b)**2)**0.5
+    
+    def lighten(self, factor : float):
+        '''lightens color by factor percentage'''
+        factor = 1 + factor
+        L, a, b = self.oklab
+        L *= factor
+        return Color(L, a, b)
+    
+    def darken(self, factor : float):
+        '''darkens color by factor percentage'''
+        factor = 1 - factor
+        L, a, b = self.oklab
+        L *= factor
+        return Color(L, a, b)

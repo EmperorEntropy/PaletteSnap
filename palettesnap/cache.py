@@ -137,3 +137,29 @@ def renameCache(oldName : str, newName : str) -> None:
         newPath = os.path.join(cacheDir, f"{newName}.toml")
         os.rename(oldPath, newPath)
         console.log(f"Renamed {oldName}.toml to {newName}.toml.")
+    
+def checkCache(name : str) -> bool:
+    '''checks a cached palette and makes sure it is legal'''
+    currPalette = list(readPalette().keys())
+    palettePath = os.path.join(setup.cache, f"{name}")
+    cachedPalette = list(toml.load(palettePath).keys())
+    if currPalette == cachedPalette:
+        return True
+    else:
+        return False
+
+def checkAll() -> None:
+    '''checks all cached palettes and returns list of illegal ones'''
+    # Get all cached palettes
+    cacheDir = setup.cache
+    exclude = ["palette.toml", "PaletteTest.html", "styles.css"]
+    allFiles = os.listdir(cacheDir)
+    cachedPalettes = [file for file in allFiles if file not in exclude]
+    illegalPalettes = [palette for palette in cachedPalettes if not checkCache(palette)]
+    count = len(illegalPalettes)
+    if len(illegalPalettes) == 0:
+        console.log("All palettes are well-defined.")
+    else:
+        console.log(f"[red]{count}[/red] palettes with invaild palette variable names found.")
+        console.log(f"{illegalPalettes}")
+    

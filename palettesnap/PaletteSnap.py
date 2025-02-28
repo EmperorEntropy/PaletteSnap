@@ -6,7 +6,8 @@
 from . import setup
 from .colorOptimize import performOptimal
 from .console import console
-from .colorClass import Color, hslColor, rgbColor, hexColor, lchColor
+from .colorClass import Color, rgbColor, hexColor, lchColor
+from .background import findBgGradient
 
 # External Modules
 import numpy as np
@@ -87,16 +88,6 @@ def findForeground(bgColor : Color, labColors : npt.NDArray[any]) -> Color:
     fgColor = tuple(fgColor[0])
     fgColor = Color(*fgColor)
     return fgColor
-
-def findBgGradient(bgColor : Color, fgColor : Color) -> dict[str, Color]:
-    '''determines background accent'''
-    bgDict = dict()
-    # Get 5 gradient colors from background to foreground
-    gradient = np.linspace(bgColor.oklab, fgColor.oklab, 7)
-    gradient = [Color(*tuple(labColor)) for labColor in gradient]
-    for i in range(1, 6):
-        bgDict[f"bg{i}"] = gradient[i]
-    return bgDict
 
 def filterColors(labColors : npt.NDArray[any], specialColor : tuple[int | float, int | float, int | float], numSample : int) -> Color:
     '''filter colors in image based on a color'''
@@ -372,11 +363,6 @@ def extractPalette(imgPath : str, mode : str, dominant : int, extraFlag : bool, 
         newPalette = adjustAccents(palette, iterations, weight)
         palette = {**palette, **newPalette}
 
-    # background gradient
-    console.log("Generating background gradient.")
-    bgGradient = findBgGradient(palette["bg"], palette["fg"])
-    palette |= bgGradient
-
     # add image path and mode
     palette["image"] = imgPath
     if mode == "auto":
@@ -384,8 +370,13 @@ def extractPalette(imgPath : str, mode : str, dominant : int, extraFlag : bool, 
     else:
         palette["mode"] = mode
 
+    # generate background gradient
+    console.log("Generating background gradient.")
+    bgGradient = findBgGradient(palette["bg"], palette["fg"])
+    palette |= bgGradient
+
     # reorder palette
-    bgOrder = ['image', 'mode', 'bg', 'bg1', 'bg2', 'bg3', 'bg4', 'bg5']
+    bgOrder = ['image', 'mode', 'bg', 'fg', 'bg1', 'bg2', 'bg3', 'bg4', 'bg5']
     reorderPalette = {key: palette[key] for key in bgOrder}
     reorderPalette.update({key: value for key, value in palette.items() if key not in reorderPalette})
     palette = reorderPalette

@@ -6,7 +6,7 @@
 import os
 import toml
 from string import Template
-from re import sub
+from re import sub, findall
 
 # Internal modules
 from . import setup
@@ -157,6 +157,44 @@ def replaceVar(tempContents : str, palette : dict[str, Color]) -> str:
             tempContents = tempContents.replace("{{" + key + ".h}}", str(palette[key].hsl[0]))
             tempContents = tempContents.replace("{{" + key + ".s}}", str(palette[key].hsl[1]))
             tempContents = tempContents.replace("{{" + key + ".l}}", str(palette[key].hsl[2]))
+    # lighten, darken, and mode inverse
+    lightenPattern = r"\{\{(.*?).lighten\(([0-9.\d]+)\)\}\}"
+    darkenPattern = r"\{\{(.*?).darken\(([0-9.\d]+)\)\}\}"
+    modeInversePattern = r"\{\{(.*?).modeInverse\(([0-9.\d]+)\)\}\}"
+    lightenMatches = findall(lightenPattern, tempContents)
+    darkenMatches = findall(darkenPattern, tempContents)
+    modeInverseMatches = findall(modeInversePattern, tempContents)
+    for match in lightenMatches:
+        name = match[0]
+        value = float(match[1])
+        if name in palette:
+            currColor = palette[name]
+            tempContents = tempContents.replace("{{" + name + ".lighten(" + str(value) + ")}}", Color.lighten(currColor, value).hex)
+        else:
+            console.log(f"Cannot lighten {name} with value {value}")
+    for match in darkenMatches:
+        name = match[0]
+        value = float(match[1])
+        if name in palette:
+            currColor = palette[name]
+            tempContents = tempContents.replace("{{" + name + ".darken(" + str(value) + ")}}", Color.darken(currColor, value).hex)
+        else:
+            console.log(f"Cannot darken {name} with value {value}")
+    for match in modeInverseMatches:
+        mode = palette["mode"]
+        name = match[0]
+        value = float(match[1])
+        # mode inverse darkens a color if the mode is light
+        # mode inverse lightens a color if the mode is dark
+        if name in palette:
+            currColor = palette[name]
+            if mode == "light":
+                newColor = Color.darken(currColor, value).hex
+            else:
+                newColor = Color.lighten(currColor, value).hex
+            tempContents = tempContents.replace("{{" + name + ".modeInverse(" + str(value) + ")}}", newColor)
+        else:
+            console.log(f"Cannot apply mode inverse to {name} with value {value}")
     return tempContents
 
 def exportTemplates(palette : dict[str, Color]) -> None:
@@ -207,5 +245,5 @@ def exportTemplates(palette : dict[str, Color]) -> None:
 
 def exportAll(colors : dict[str, Color]) -> None:
     exportHTML()
-    exportCSS(colors)
+    #exportCSS(colors)
     exportTemplates(colors)
