@@ -116,5 +116,11 @@ def previewPalette(imageFlag) -> None:
         # Get terminal type and print image
         terminal = getTerminal()
         showImage(imgPath, terminal)
-    # Print colors
-    printColors(palette)
+        # Print colors
+        printColors(palette)
+    else:
+        # Only print the colors
+        palette = readPalette()
+        palette.pop("image")
+        palette.pop("mode")
+        printColors(palette)

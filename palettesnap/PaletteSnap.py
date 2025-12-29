@@ -188,7 +188,6 @@ def processImage(imgPath : str) -> npt.NDArray[any]:
     '''processes the image and returns an array of Oklab colors'''
     # Get the colors
     console.log(f"Reading image [u]{imgPath}[/u].")
-    imgPath = os.path.expanduser(imgPath)
     rgbColors = read_image(imgPath, method="Imageio")
     rgbColors = rgbColors[..., 0:3]
     # Convert colors to Oklab color space
@@ -315,6 +314,7 @@ def extractPalette(imgPath : str, mode : str, dominant : int, extraFlag : bool, 
     accentColors = parseConfig()
 
     console.log("Extracting palette.")
+    imgPath = os.path.abspath(imgPath)
     palette = pickColors(imgPath, accentColors, mode, dominant, numSample)
 
     # harmony colors

@@ -13,8 +13,8 @@ from .cache import cacheSet, loadCache, loadRandomCache, removeCache, clearCache
 from .outdatedCheck import outdatedCheck
 
 # External Modules
+from typing import Annotated
 import typer
-from typing_extensions import Annotated
 import time
 
 ###
@@ -34,6 +34,7 @@ def gen(
     skip: Annotated[
         bool,
         typer.Option(
+            "--skip",
             help="Skip creating templates and setting wallpaper.", rich_help_panel="Options"
         ),
     ] = False,
@@ -52,18 +53,21 @@ def gen(
     extra: Annotated[
         bool,
         typer.Option(
+            "--extra",
             help="Toggles extra colors.", rich_help_panel="Variety"
         ),
     ] = False,
     mix: Annotated[
         bool,
         typer.Option(
+            "--mix",
             help="Toggles extra colors.", rich_help_panel="Variety"
         ),
     ] = False,
     tweak: Annotated[
         bool,
         typer.Option(
+            "--tweak",
             help="Toggles extra colors.", rich_help_panel="Variety"
         ),
     ] = False,
@@ -104,7 +108,7 @@ def gen(
         ),
     ] = 100,
     cache : Annotated[
-        str,
+        str | None,
         typer.Option(
             help="Name of palette to be cached as.",
             rich_help_panel="Options"
@@ -180,6 +184,7 @@ def preview(
     image : Annotated[
         bool,
         typer.Option(
+            " /--no-image",
             help="Flag for image in preview output.",
             rich_help_panel="Customization"
         ),
@@ -248,7 +253,7 @@ def cache_remove(
 def cache_clear(
     skip: Annotated[
         bool,
-        typer.Option(help="Skips the confirmation prompt.")
+        typer.Option("--skip", help="Skips the confirmation prompt.")
     ] = False,
 ):
     '''Clears all cached palettes.'''
@@ -277,11 +282,11 @@ def cache_list():
 
 @cache_app.command("rename")
 def cache_rename(
-    oldName: Annotated[
+    old_name: Annotated[
         str,
         typer.Argument(help="Present name of cached palette.")
     ],
-    newName : Annotated[
+    new_name : Annotated[
         str,
         typer.Argument(help="New name for cached palette.")
     ],
@@ -289,7 +294,7 @@ def cache_rename(
     '''Renames a cached palette.'''
     start = time.time()
     outdatedCheck()
-    renameCache(oldName, newName)
+    renameCache(old_name, new_name)
     end = time.time()
     console.log(f"Process [green]completed[/green] in {end-start} seconds.")
 

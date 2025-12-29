@@ -35,7 +35,7 @@ def findEnv():
 
 def setMacWallpaper(imgPath):
     '''set the wallpaper for macOS'''
-    subprocess.run(['osascript', '-e', 'tell application \"System Events\" to tell every desktop to set picture to \"%s\" as POSIX file' % imgPath])
+    subprocess.run(['osascript', '-e', f'tell application \"System Events\" to tell every desktop to set picture to POSIX file \"{imgPath}\"'], capture_output=True, text=True)
 
 # based off pywal's https://raw.githubusercontent.com/dylanaraps/pywal/master/pywal/wallpaper.py
 def setLinuxWallpaper(env, imgPath):
